@@ -1,86 +1,116 @@
-.DOSSEG
-.MODEL SMALL
-.STACK 100h
-.DATA
-num db 10 dup (0)
-salto db cr,lf,'$'
+;Sorting integers using quicksort             QSORT.ASM
+;
+;        Objective: Sorts an array of integers using 
+;                   quick sort. Uses recursion.
+;            Input: Requests integers from the user.
+;                   Terminated by entering zero.
+;           Output: Outputs the sorted arrray.
+                  
+%include "io.mac"
 
-cr equ 10
-lf equ 13
+.DATA
+prompt_msg  db  "Ingrese enteros. ",0DH,0AH
+            db  "Ingresar un cero terminara la entrada.",0
+output_msg  db  "De mayor a menor: ",0
+
+.UDATA
+array1      resw  200
 
 .CODE
-mov dx,@data
-mov ds,dx
+      .STARTUP
+      PutStr  prompt_msg     ; request the number
+      nwln
+      mov     EBX,array1
+      xor     EDI,EDI        ; EDI keeps a count of 
+read_more:                   ;     input numbers
+      GetInt  AX             
+      mov     [EBX+EDI*2],AX ; store input # in array
+      cmp     AX,0           ; test if it is zero
+      je      exit_read
+      inc     EDI             
+      jmp     read_more
 
-lea si,num
-mov si,0
-mov cx,10
+exit_read:
+      ; prepare arguments for procedure call
+      mov     EBX,array1
+      xor     ESI,ESI        ; ESI = lo index
+      dec     EDI            ; EDI = hi index
+      call    qsort
 
-inicio:
-mov ah,01h
-int 21h
-mov num[si],al
-mov ah,09
-mov dx,offset salto
-int 21h
-inc si
-loop inicio
-mov si,0
-mov cx,10
-imprime:
-mov ah,02h
-mov dl,num[si]
-int 21h
-mov ah,02h
-mov dl,' '
-int 21h
-inc si
-loop imprime
-lea di,num
-mov di,0
-mov si,0
-mov cx,10
+      PutStr  output_msg     ; output sorted array
+write_more:
+      ; since qsort preserves all registers, we will 
+      ; have valid EBX and ESI values.
+      mov     AX,[EBX+EDI*2]
+      cmp     AX,0
+      je      done
+      PutInt  AX
+      nwln
+      dec     EDI
+      jmp     write_more
 
-ciclo1:
-push cx
-; mov al,num[si]
-mov cx,10
+done:
+      .EXIT
 
-ciclo2:
-; mov ah,num[di]
-cmp num[si],num[di]
-ja intercambio
-jmp sigue
+;-------------------------------------------------------
+;Procedure qsort receives a pointer to the array in BX. 
+;LO and HI are received in ESI and EDI, respectively.
+;It preserves all the registers.
+;-------------------------------------------------------
 
-intercambio:
-mov al,num[si]
-mov num[si],num[di]
-mov num[di],al
-;mov num[si],ah
-;mov num[di],al
-;mov al,ah 
+qsort:
+      pushad   
+      cmp     EDI,ESI
+      jle     qsort_done     ; end recursion if hi <= lo
 
-sigue:
-inc di
-loop ciclo2
-inc si
-pop cx
-loop ciclo1
-mov si,0
-mov cx,10
+      ; save hi and lo for later use
+      mov     ECX,ESI
+      mov     EDX,EDI
 
-print:
-mov ah,02h
-mov dl,num[si]
-int 21h
-mov ah,02h
-mov dl,' '
-int 21h
-inc si
+      mov     AX,[EBX+EDI*2] ; AX = xsep
 
-loop print
-mov ah,4ch
-int 21h
+lo_loop:                        ;
+      cmp     [EBX+ESI*2],AX    ;
+      jge     lo_loop_done      ; LO while loop
+      inc     ESI               ;
+      jmp     lo_loop           ;
+lo_loop_done:
 
-end
+      dec     EDI            ; hi = hi-1
+hi_loop:
+      cmp     EDI,ESI           ;
+      jle     sep_done          ;
+      cmp     [EBX+EDI*2],AX    ; HI while loop
+      jle     hi_loop_done      ;
+      dec     EDI               ;
+      jmp     hi_loop           ;
+hi_loop_done:
 
+      xchg    AX,[EBX+ESI*2]    ;
+      xchg    AX,[EBX+EDI*2]    ; x[i] <=> x[j]
+      xchg    AX,[EBX+ESI*2]    ;
+      jmp     lo_loop
+
+sep_done:
+      xchg    AX,[EBX+ESI*2]    ;
+      xchg    AX,[EBX+EDX*2]    ; x[i] <=> x[hi]
+      xchg    AX,[EBX+ESI*2]    ;
+      
+      dec     ESI
+      mov     EDI,ESI           ; hi = i-1
+      ; We modify the ESI value in the next statement.
+      ; Since the original ESI value is in EDI, we use
+      ; EDI to get i+1 value for the second qsort call.
+      mov     ESI,ECX
+      call    qsort
+
+      ; EDI has the i value
+      inc     EDI       
+      inc     EDI
+      mov     ESI,EDI           ; lo = i+1
+      mov     EDI,EDX            
+      call    qsort
+
+qsort_done:
+      popad
+      ret  
