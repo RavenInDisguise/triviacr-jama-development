@@ -10,7 +10,7 @@
 .DATA
 ;Mensajes generales
 msj_prompt0  db '~Bienvenido a su juego de Trivia preferido~',0AH,0
-msj_menu     db '~~~~~~~Menu~~~~~~~~~',0AH,0
+msj_menu     db '~~~~~~~~~~~~~~~~~~~Menu~~~~~~~~~~~~~~~~~~~~',0AH,0
 msj_op1      db '1. Jugar ',0AH,0
 msj_op2      db '2. Ranking ',0AH,0
 msj_op3      db '3. Salir ',0AH,0
@@ -23,6 +23,11 @@ msj_prompt6  db 'Su respuesta: ',0
 msj_prompt7  db 'Su respuesta fue correcta!',0AH,0
 msj_prompt8  db 'Su respuesta fue incorrecta!',0AH,0
 msj_prompt9  db 'La trivia ha terminado!',0AH,0
+msj_prompt10 db 'Turno: ',0
+msj_prompt11 db '~Al ingresar una respuesta hagalo insertando las opciones dadas: a,b,c,d o las opciones: v,f.',0AH,0
+msj_prompt12 db '~Usted puede salir en cualquier momento de la Trivia al ingresar la letra s.',0AH,0
+msj_prompt13 db '~~~~~~~~~~~Instrucciones de uso~~~~~~~~~~~',0AH,0
+decorator    db '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',0AH,0
 
 ;Preguntas
 question0  db 'Costa Rica es el pais mas grande de Centroamerica: verdadero o falso',0AH,0
@@ -31,12 +36,12 @@ question2  db 'A que canton pertenece el distrito de Vargas Araya? a) Montes de 
 question3  db 'Desamparados es el canton mas grande de Costa Rica: verdadero o falso',0AH,0
 question4  db 'El distrito de Sabanilla pertenece al canton de Montes de Oca: verdadero o falso',0AH,0
 question5  db 'En cual billete aparece Carmen Lyra? a)20 mil b)10 mil c)5 mil d)50 mil',0AH,0
-question6  db 'q6',0AH,0
-question7  db 'q7',0AH,0
-question8  db 'q8',0AH,0
-question9  db 'q9',0AH,0
-question10 db 'q10',0AH,0
-question11 db '',0AH,0
+question6  db 'Cuantas veces ha sido campeon el Deportivo Saprissa? a)26 b)31 c)21 d)36 ',0AH,0
+question7  db 'La Asamblea legislativa posee 56 diputados: verdadero o falso',0AH,0
+question8  db 'Los parques nacionales ocupan el siguiente porcentaje de superficie del pais: a)11% b)13% c)12% d)15%',0AH,0
+question9  db 'Costa Rica es un pais sin ejercito: verdadero o falso',0AH,0
+question10 db 'La mayor actividad tectonica se da entre las placas: a)Cocos y Caribe b)Cocos y Pacifico c)Mangos y Caribe d)Pacifico y Nazca',0AH,0
+question11 db 'A las tierras de relleno en Costa Rica, donde se recogen los sedimentos que vienen de las montañas, las conocemos como llanuras: verdadero o falso',0AH,0
 question12 db '',0AH,0
 question13 db '',0AH,0
 question14 db '',0AH,0
@@ -78,21 +83,22 @@ question49 db '',0AH,0
 question50 db '',0AH,0
 
 ;Respuestas
-array_resp   db 'f','a','a','v','v','b','a','a','a','a','a','a','a'
+array_resp   db 'f','a','a','v','v','b','d','f','c','v','a','v','x'
 
 ;Puntos por pregunta
-array_pts   db 2,3,1,1
+array_pts    dd  1,  2,  3,  1,  1,  2,  2,  1,  2,  2,  1  
+;                0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10  
 
 ;Preguntas ya respondidas
-array_done_quest    TIMES 51  dd 51
+array_done_quest           TIMES 51  dd 51
 
 ;Usuarios jugando actualmente
-array_ingame_users  TIMES 4   dd '~'
-array_users_pts     TIMES 4   dd -1
+array_ingame_users         TIMES 4   dd '~'
+array_ingame_users_pts     TIMES 4   dd 0
 
 ;Usuarios en ranking
-array_users_ranking TIMES 11  dd '~'
-array_pts_ranking   TIMES 11  dd -1
+array_users_ranking        TIMES 11  dd '~'
+array_pts_ranking          TIMES 11  dd -1
 
 ;Pruebas ########################################
 prueba1 db 'Nums del array:',0AH,0
@@ -100,9 +106,9 @@ prueba2 db 'Num actual',0AH,0
 
 .UDATA
 players     resd 1              ;Cantidad de jugadores ingame
-nickname1   resd 3              ;Nickname de cada usuario
-nickname2   resd 3              ;Nickname de cada usuario
-nickname3   resd 3              ;Nickname de cada usuario
+nickname1   resd 3              ;Nickname de usuario
+nickname2   resd 3              ;Nickname de usuario
+nickname3   resd 3              ;Nickname de usuario
 answer      resb 1              ;Respuestas dadas por los usuarios
 option      resd 1              ;Opciones escogidas del menu
 value       resd 5
@@ -497,7 +503,12 @@ result      resb 1
     sub     ESI,ESI
     sub     EDI,EDI
     mov     ECX,players
-    PutStr  msj_prompt0         ;Mensaje general                
+    PutStr  msj_prompt0
+    nwln
+    PutStr  msj_prompt13
+    PutStr  msj_prompt12
+    PutStr  msj_prompt11
+    nwln                       
 show_menu:
     PutStr  msj_menu
     PutStr  msj_op1
@@ -517,11 +528,12 @@ ranking:
     sub     EDX,EDX
     PutStr  msj_prompt5
     nwln
-    jmp     show_menu
+    jmp     done
 players_count:
     sub     EDX,EDX
     PutStr  msj_prompt1         ;Pregunta cuantos jugadores jugaran
     GetInt  CX  
+    mov     [players],CX
 get_nickname:
     PutStr  msj_prompt2         ;Pide el nickname
     GetStr  nickname1           ;Lo adquiere
@@ -553,6 +565,16 @@ get_random_number:
     div     ECX
     mov     EAX,EDX           
     ;PutLInt EAX
+    sub     EBX,EBX
+analize_next_turn:
+    cmp     dword[players],ESI
+    je      restart_CX
+    mov     dword[value],ESI
+get_turno: 
+    nwln
+    PutStr  msj_prompt10
+    PutStr  dword[array_ingame_users+ESI*4]
+    inc     ESI
 get_answered_questions:
     cmp     dword[array_done_quest+EBX*4],51
     je      clear_question
@@ -560,10 +582,11 @@ get_answered_questions:
     je      trivia_done
     cmp     dword[array_done_quest+EBX*4],EAX
     je      get_random_number
-    PutLInt dword[array_done_quest+EBX*4]
+    ;PutLInt dword[array_done_quest+EBX*4]
     inc     EBX
     jmp     get_answered_questions
 clear_question:
+    nwln
     call    question_selection
 get_answer_user:
     PutStr  msj_prompt6
@@ -571,20 +594,27 @@ get_answer_user:
     mov     DL,byte[answer]
     cmp     byte[array_resp+EAX],DL
     je      is_correct
+    cmp     DL,'s'
+    je      ranking
     PutStr  msj_prompt8
     jmp     get_random_number
 is_correct:
     sub     EDX,EDX
     PutStr  msj_prompt7
     mov     dword[array_done_quest+EDI*4],EAX
-    ;mov     EDX,dword[array_done_quest+EDI*4]
+    mov     EDX,dword[array_pts+EAX*4]
+    ;PutLInt dword[array_pts+EAX*4]
+    ;nwln
+    add     dword[array_ingame_users_pts+ESI*4],EDX
+    ;PutLInt dword[array_ingame_users_pts+ESI*4]
     inc     EDI
-    ;PutLInt EDX
-    ;PutLInt EDI
     jmp     get_random_number
 trivia_done:
     PutStr  msj_prompt9
     jmp     ranking
+restart_CX:
+    mov     ESI,0
+    jmp     get_turno
 done:
     .EXIT
 
@@ -649,4 +679,3 @@ question_selection10:
     jmp     return      
 return:
     ret
-
