@@ -25,7 +25,7 @@ array1      resw  200
 read_more:                   ;     input numbers
       GetInt  AX             
       mov     [EBX+EDI*2],AX ; store input # in array
-      cmp     AX,0           ; test if it is zero
+      cmp     AX,0          ; test if it is zero
       je      exit_read
       inc     EDI             
       jmp     read_more
@@ -38,14 +38,18 @@ exit_read:
       call    qsort
 
       PutStr  output_msg     ; output sorted array
+      xor CX,CX
 write_more:
       ; since qsort preserves all registers, we will 
       ; have valid EBX and ESI values.
       mov     AX,[EBX+EDI*2]
+      cmp     CX,10
+      je      done
       cmp     AX,0
       je      done
       PutInt  AX
       nwln
+      inc CX
       dec     EDI
       jmp     write_more
 
