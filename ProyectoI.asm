@@ -23,7 +23,7 @@ msj_prompt6  db 'Su respuesta: ',0
 msj_prompt7  db 'Su respuesta fue correcta!',0AH,0
 msj_prompt8  db 'Su respuesta fue incorrecta!',0AH,0
 msj_prompt9  db 'La trivia ha terminado!',0AH,0
-msj_prompt10 db 'Turno: ',0
+msj_prompt10 db 'Turno: ',0AH,0
 msj_prompt11 db '~Al ingresar una respuesta hagalo insertando las opciones dadas: a,b,c,d o las opciones: v,f.',0AH,0
 msj_prompt12 db '~Usted puede salir en cualquier momento de la Trivia al ingresar la letra s.',0AH,0
 msj_prompt13 db '~~~~~~~~~~~Instrucciones de uso~~~~~~~~~~~',0AH,0
@@ -31,63 +31,63 @@ decorator    db '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',0AH,0
 
 ;Preguntas
 question0  db 'Costa Rica es el pais mas grande de Centroamerica: verdadero o falso',0AH,0
-question1  db 'Cual es el canton en el que se encuentra el volcan Poas? a) Poas b) Alajuela c) Perez Zeledon d) Sabanilla',0AH,0
-question2  db 'A que canton pertenece el distrito de Vargas Araya? a) Montes de Oca b) Desamparados c) Alajuelita d) Poas',0AH,0
+question1  db '¿Cual es el canton en el que se encuentra el volcan Poas? a) Poas b) Alajuela c) Perez Zeledon d) Sabanilla',0AH,0
+question2  db '¿A que canton pertenece el distrito de Vargas Araya? a) Montes de Oca b) Desamparados c) Alajuelita d) Poas',0AH,0
 question3  db 'Desamparados es el canton mas grande de Costa Rica: verdadero o falso',0AH,0
 question4  db 'El distrito de Sabanilla pertenece al canton de Montes de Oca: verdadero o falso',0AH,0
-question5  db 'En cual billete aparece Carmen Lyra? a)20 mil b)10 mil c)5 mil d)50 mil',0AH,0
-question6  db 'Cuantas veces ha sido campeon el Deportivo Saprissa? a)26 b)31 c)21 d)36 ',0AH,0
+question5  db '¿En cual billete aparece Carmen Lyra? a) 20 mil b) 10 mil c) 5 mil d) 50 mil',0AH,0
+question6  db '¿Cuantas veces ha sido campeon el Deportivo Saprissa? a) 26 b) 31 c) 21 d) 36 ',0AH,0
 question7  db 'La Asamblea legislativa posee 56 diputados: verdadero o falso',0AH,0
-question8  db 'Los parques nacionales ocupan el siguiente porcentaje de superficie del pais: a)11% b)13% c)12% d)15%',0AH,0
+question8  db 'Los parques nacionales ocupan el siguiente porcentaje de superficie del pais: a) 11% b) 13% c) 12% d) 15%',0AH,0
 question9  db 'Costa Rica es un pais sin ejercito: verdadero o falso',0AH,0
-question10 db 'La mayor actividad tectonica se da entre las placas: a)Cocos y Caribe b)Cocos y Pacifico c)Mangos y Caribe d)Pacifico y Nazca',0AH,0
+question10 db 'La mayor actividad tectonica se da entre las placas: a) Cocos y Caribe b) Cocos y Pacifico c) Mangos y Caribe d) Pacifico y Nazca',0AH,0
 question11 db 'A las tierras de relleno en Costa Rica, donde se recogen los sedimentos que vienen de las montañas, las conocemos como llanuras: verdadero o falso',0AH,0
-question12 db '',0AH,0
-question13 db '',0AH,0
-question14 db '',0AH,0
-question15 db '',0AH,0
-question16 db '',0AH,0
-question17 db '',0AH,0
-question18 db '',0AH,0
-question19 db '',0AH,0
-question20 db '',0AH,0
-question21 db '',0AH,0
-question22 db '',0AH,0
-question23 db '',0AH,0
-question24 db '',0AH,0
-question25 db '',0AH,0
-question26 db '',0AH,0
-question27 db '',0AH,0
-question28 db '',0AH,0
-question29 db '',0AH,0
-question30 db '',0AH,0
-question31 db '',0AH,0
-question32 db '',0AH,0
-question33 db '',0AH,0
-question34 db '',0AH,0
-question35 db '',0AH,0
-question36 db '',0AH,0
-question37 db '',0AH,0
-question38 db '',0AH,0
-question39 db '',0AH,0
-question40 db '',0AH,0
-question41 db '',0AH,0
-question42 db '',0AH,0
-question43 db '',0AH,0
-question44 db '',0AH,0
-question45 db '',0AH,0
-question46 db '',0AH,0
-question47 db '',0AH,0
-question48 db '',0AH,0
-question49 db '',0AH,0
-question50 db '',0AH,0
-
+question12 db 'El próximo 15 de setiembre Costa Rica estará celebrando su bicentenario: verdadero o falso',0AH,0
+question13 db 'El pueblo indígena Miskitu pertenece a Costa Rica: verdadero o falso',0AH,0
+question14 db 'El Volcán de Fuego se encuentra en la Cordillera Volcánica Central de Costa Rica: verdadero o falso',0AH,0
+question15 db 'El himno nacional de Costa Rica fue compuesto por Manuel María Gutiérrez Flores: verdadero o falso',0AH,0
+question16 db 'El Ave Nacional de Costa Rica es el quetzal: verdadero o falso',0AH,0
+question17 db 'El Parque Nacional Corcovado es un parque nacional de Costa Rica: verdadero o falso',0AH,0
+question18 db 'Guanacaste se anexó a Costa Rica el 25 de julio de 1824: verdadero o falso',0AH,0
+question19 db 'Costa Rica limita al sur con Nicaragua: verdadero o falso',0AH,0
+question20 db 'El escudo nacional de Costa Rica tiene 8 estrellas: verdadero o falso',0AH,0
+question21 db 'El punto es un baile típico de Costa Rica: verdadero o falso',0AH,0
+question22 db 'En Costa Rica hay casi 200 volcanes: verdadero o falso',0AH,0
+question23 db 'El gallo pinto es una comida típica de Costa Rica: : verdadero o falso',0AH,0
+question24 db 'El país de Costa Rica está formado por 7 provincias y ¿cuántos cantones? a) 76 b) 38 c) 82 d) 57',0AH,0
+question25 db 'Las provincias de Costa Rica son: a) 12 b) 11 c) 20 d) 7',0AH,0
+question26 db 'Uno de los símbolos nacionales de Costa Rica es: a) La carreta b) El tucán c) La mariposa morfo d) Ninguna de las anteriores',0AH,0
+question27 db 'Los parques nacionales de Costa Rica son: a) 35 b) 27 c) 42 d) 13',0AH,0
+question28 db 'El río más grande de Costa Rica es: a) Sixaola b) Tempisque c) Reventazón d) Grande de Térraba',0AH,0
+question29 db 'El felino más grande de Costa Rica es: a) El león b) El jaguar c) El puma d) El chita',0AH,0
+question30 db '¿Cuál de estos volcanes de Costa Rica se encuentra activo? a) Poás b) Barva c) Chato d) Cerro Pelón',0AH,0
+question31 db 'En Costa Rica se conoce como grano de oro a: a) Los garbanzos b) El arroz c) El maíz d) El café',0AH,0
+question32 db 'La flor nacional de Costa Rica es: a) La margarita b) El clavel rosado c) La guaria morada d) El tulipán',0AH,0
+question33 db 'Una serpiente venenosa de Costa Rica es: a) La cobra b) La coral c) La boa d) La cascabel',0AH,0
+question34 db 'Cartago lleva sin ser campeon la siguiente cantidad de años: a) 78 b) 67 c) 82 d) 80',0AH,0
+question35 db 'Cuando emergen la Cordillera de Guanacaste y la Sierra Volcánica de Tilarán, después de las tierras más viejas, se formó un grupo de islas llamadas: a) Isla del Coco b) Isla Guanarivas c) Isla Tortuga d) Isla Rivas',0AH,0
+question36 db 'En general, las primeras tierras que emergieron en Costa Rica están en Bahia Santa Elena: verdadero o falso',0AH,0
+question37 db 'Según los estudios más aceptados la etnia y cultura indígena que migró desde el norte hasta Costa Rica fue: a) Boutos b) Malekus c) Chorotegas d) Huetares',0AH,0
+question38 db 'El presidente que abolio la pena de muerte fue Tomas Guardia: verdadero o falso',0AH,0
+question39 db 'EL fundador y primer presidente de la Republica fue: a) Tomas Guardia b) Jose Maria Castro Madriz c) Clodomiro Picado d) Mario Echandi',0AH,0
+question40 db 'El presidente de Costa Rica que fue electo sin haber sido candidato fue Otilio Ulate: verdadero o falso',0AH,0
+question41 db 'La escritora de "Cuentos de mi Tia Panchita" fue: a) Carmen Lyra b) Yolanda Oreamuno c) Sandra Cauffman d) Marcela Rey"',0AH,0
+question42 db 'Franklyn Chang fue el primer costarricense en trabajar en la NASA: verdadero o falso',0AH,0
+question43 db 'El tranvía eléctrico de San José fue inaugurado en el año: a) 1898 b) 1990 c) 2001 d) 1999',0AH,0
+question44 db 'Sandra Cauffman fue la primera costarricense en trabajar en la NASA: verdadero o falso',0AH,0
+question45 db 'La capital de Costa Rica es: a) Madrid b) Buenos Aires c) San Jose d) Santiago',0AH,0
+question46 db 'Gloria Bejarano diseño la bandera de Costa Rica: verdadero o falso',0AH,0
+question47 db 'El año de la independecia de Costa Rica fue: a) 1820 b) 1821 c) 1600 d) 1870',0AH,0
+question48 db 'La bandera de Costa Rica estuvo inspirada en la bandera de Canada: verdadero o falso',0AH,0
+question49 db 'El año en que se descubrio Costa Rica fue: a) 1500 b) 1600 c)1505 d) 1502',0AH,0
+question50 db 'El primer contrato ferrocarrilero se hizo en 1860: verdadero o falso',0AH,0
+                                           
 ;Respuestas
-array_resp   db 'f','a','a','v','v','b','d','f','c','v','a','v','x'
+array_resp   db 'f','a','a','v','v','b','d','f','c','v','a','v','v','f','f','v','f','v','v','f','f','v','v','v','c','d','a','b','d','b','a','d','c','d','d','b','v','c','v','b','f','a','v','d','v','c','f','b','f','d','f'
 
 ;Puntos por pregunta
-array_pts    dd  1,  2,  3,  1,  1,  2,  2,  1,  2,  2,  1  
-;                0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10  
+array_pts    dd  1,  2,  3,  1,  1,  2,  2,  1,  2,  1,  2,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  1,  2,  1,  2,  1,  2,  1,  2,  1,  2,  1,  2,  1,  2,  1
+;                0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  50
 
 ;Preguntas ya respondidas
 array_done_quest           TIMES 51  dd 51
@@ -98,7 +98,7 @@ array_ingame_users_pts     TIMES 4   dd 0
 
 ;Usuarios en ranking
 array_users_ranking        TIMES 11  dd '~'
-array_pts_ranking          TIMES 11  dd -1
+array_pts_ranking          TIMES 11  dd 0
 
 ;Pruebas ########################################
 prueba1 db 'Nums del array:',0AH,0
@@ -526,6 +526,7 @@ compare_option:
     je      done
 ranking:
     sub     EDX,EDX
+    nwln
     PutStr  msj_prompt5
     nwln
     jmp     done
@@ -561,16 +562,15 @@ get_nickname:
 get_random_number:
     rdtsc                       ;Hora del computador para generar el random
     sub     EDX, EDX
-    mov     ECX, 10-0+1         ;Numeros random de 0 a 50
+    mov     ECX, 50-0+1         ;Numeros random de 0 a 50
     div     ECX
     mov     EAX,EDX           
     ;PutLInt EAX
     sub     EBX,EBX
 analize_next_turn:
     cmp     dword[players],ESI
-    je      restart_CX
-    mov     dword[value],ESI
-get_turno: 
+    je      restart_ESI
+get_turno:   
     nwln
     PutStr  msj_prompt10
     PutStr  dword[array_ingame_users+ESI*4]
@@ -592,10 +592,10 @@ get_answer_user:
     PutStr  msj_prompt6
     GetCh   [answer]
     mov     DL,byte[answer]
-    cmp     byte[array_resp+EAX],DL
-    je      is_correct
     cmp     DL,'s'
     je      ranking
+    cmp     byte[array_resp+EAX],DL
+    je      is_correct
     PutStr  msj_prompt8
     jmp     get_random_number
 is_correct:
@@ -612,8 +612,8 @@ is_correct:
 trivia_done:
     PutStr  msj_prompt9
     jmp     ranking
-restart_CX:
-    mov     ESI,0
+restart_ESI:
+    sub     ESI,ESI
     jmp     get_turno
 done:
     .EXIT
