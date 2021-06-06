@@ -1,8 +1,9 @@
 ;Tecnológico de Costa Rica, Campus Tecnológico de Cartago, Escuela de Computación, Arquitectura de Computadoras (IC3101).
 ;Proyecto I
-;Trivia. 
-;Mónica María Alfaro Parrales, 2020132572
-;Viernes 05 de mayo de 2021, I Semestre, Esteban Arias Méndez.
+;Trivia 
+;Mónica María Alfaro Parrales,         2020132572
+;Jennifer Soledad Alvarado Brenes,     2020124171
+;Sabado 05 de mayo de 2021, I Semestre, Esteban Arias Méndez.
 
 
 %include "io.mac" 
@@ -27,7 +28,9 @@ msj_prompt10 db 'Turno: ',0AH,0
 msj_prompt11 db '~Al ingresar una respuesta hagalo insertando las opciones dadas: a,b,c,d o las opciones: v,f.',0AH,0
 msj_prompt12 db '~Usted puede salir en cualquier momento de la Trivia al ingresar la letra s.',0AH,0
 msj_prompt13 db '~~~~~~~~~~~Instrucciones de uso~~~~~~~~~~~',0AH,0
+msj_prompt14 db 'Los puntos de esta partida: ',0AH,0
 decorator    db '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',0AH,0
+points       db ':',0AH,0
 
 ;Preguntas
 question0  db 'Costa Rica es el pais mas grande de Centroamerica: verdadero o falso',0AH,0
@@ -86,7 +89,7 @@ question50 db 'El primer contrato ferrocarrilero se hizo en 1860: verdadero o fa
 array_resp   db 'f','a','a','v','v','b','d','f','c','v','a','v','v','f','f','v','f','v','v','f','f','v','v','v','c','d','a','b','d','b','a','d','c','d','d','b','v','c','v','b','f','a','v','d','v','c','f','b','f','d','f'
 
 ;Puntos por pregunta
-array_pts    dd  1,  2,  3,  1,  1,  2,  2,  1,  2,  1,  2,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  1,  2,  1,  2,  1,  2,  1,  2,  1,  2,  1,  2,  1,  2,  1
+array_pts    dd  1,  2,  2,  1,  1,  2,  2,  1,  2,  1,  2,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  1,  2,  1,  2,  1,  2,  1,  2,  1,  2,  1,  2,  1,  2,  1
 ;                0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  50
 
 ;Preguntas ya respondidas
@@ -100,10 +103,6 @@ array_ingame_users_pts     TIMES 4   dd 0
 array_users_ranking        TIMES 11  dd '~'
 array_pts_ranking          TIMES 11  dd 0
 
-;Pruebas ########################################
-prueba1 db 'Nums del array:',0AH,0
-prueba2 db 'Num actual',0AH,0
-
 .UDATA
 players     resd 1              ;Cantidad de jugadores ingame
 nickname1   resd 3              ;Nickname de usuario
@@ -111,8 +110,6 @@ nickname2   resd 3              ;Nickname de usuario
 nickname3   resd 3              ;Nickname de usuario
 answer      resb 1              ;Respuestas dadas por los usuarios
 option      resd 1              ;Opciones escogidas del menu
-value       resd 5
-result      resb 1 
 
 .CODE
 
@@ -509,20 +506,20 @@ result      resb 1
     PutStr  msj_prompt12
     PutStr  msj_prompt11
     nwln                       
-show_menu:
+show_menu:                      ;Muestra las opciones del menu
     PutStr  msj_menu
     PutStr  msj_op1
     PutStr  msj_op2
     PutStr  msj_op3
 ask_menu_option:
-    PutStr  msj_prompt4        ;Pregunta la opcion del menu
-    GetInt  DX 
+    PutStr  msj_prompt4         ;Pregunta la opcion del menu
+    GetInt  DX                  ;La guarda en DX
 compare_option:
-    cmp     DX,1
+    cmp     DX,1                ;Si escoge 1, inicia el juego
     je      players_count
-    cmp     DX,2
+    cmp     DX,2                ;Si escoge 2, muestra el ranking
     je      ranking
-    cmp     DX,3
+    cmp     DX,3                ;Si escoge 3 termina el programa
     je      done
 ranking:
     sub     EDX,EDX
@@ -533,12 +530,12 @@ ranking:
 players_count:
     sub     EDX,EDX
     PutStr  msj_prompt1         ;Pregunta cuantos jugadores jugaran
-    GetInt  CX  
-    mov     [players],CX
+    GetInt  CX                  ;Lo guarda en CX
+    mov     [players],CX        ;Lo guarda en la variable players
 get_nickname:
     PutStr  msj_prompt2         ;Pide el nickname
     GetStr  nickname1           ;Lo adquiere
-    mov     EAX,nickname1
+    mov     EAX,nickname1       ;Lo mueve al registro EAX para moverlo al array de usuarios jugando
     mov     [array_ingame_users+ESI*4],EAX
     dec     CX
     cmp     CX,0
@@ -546,15 +543,15 @@ get_nickname:
     inc     ESI
     PutStr  msj_prompt2         ;Pide el nickname
     GetStr  nickname2           ;Lo adquiere
-    mov     EAX,nickname2
+    mov     EAX,nickname2       ;Lo mueve al registro EAX para moverlo al array de usuarios jugando
     mov     [array_ingame_users+ESI*4],EAX
     dec     CX
     cmp     CX,0
     je      get_random_number
     inc     ESI
-    PutStr  msj_prompt2        ;Pide el nickname
-    GetStr  nickname3          ;Lo adquiere
-    mov     EAX,nickname3
+    PutStr  msj_prompt2         ;Pide el nickname
+    GetStr  nickname3           ;Lo adquiere
+    mov     EAX,nickname3       ;Lo mueve al registro EAX para moverlo al array de usuarios jugando
     mov     [array_ingame_users+ESI*4],EAX
     dec     CX
     cmp     CX,0
@@ -564,57 +561,66 @@ get_random_number:
     sub     EDX, EDX
     mov     ECX, 50-0+1         ;Numeros random de 0 a 50
     div     ECX
-    mov     EAX,EDX           
-    ;PutLInt EAX
+    mov     EAX,EDX             ;Guarda el numero random en EAX
     sub     EBX,EBX
 analize_next_turn:
-    cmp     dword[players],ESI
-    je      restart_ESI
+    cmp     dword[players],ESI  ;Compara si el valor de ESI es igual a la cantidad de jugadores actuales
+    je      restart_ESI         ;De ser asi, se reinica ESI para que reinicie el contador de turnos
 get_turno:   
     nwln
-    PutStr  msj_prompt10
-    PutStr  dword[array_ingame_users+ESI*4]
-    inc     ESI
+    PutStr  msj_prompt10        ;Muestra a quien le toca responder por turno
+    PutStr  dword[array_ingame_users+ESI*4] 
+    inc     ESI                 ;Incrementa ESI que representa el contador de turnos
 get_answered_questions:
-    cmp     dword[array_done_quest+EBX*4],51
-    je      clear_question
-    cmp     EBX,50
-    je      trivia_done
-    cmp     dword[array_done_quest+EBX*4],EAX
+    cmp     dword[array_done_quest+EBX*4],51 ;Si se topa con un 51, significa que llego al final del array
+    je      clear_question      ;Eso significa que la pregunta no esta en el array de preguntas ya respondidas
+    cmp     EBX,50              ;Si ya hay 51 preguntas en el array de preguntas respondidas
+    je      trivia_done1        ;Significa que ya se terminaron todas las preguntas y ya fueron respondidas
+    cmp     dword[array_done_quest+EBX*4],EAX ;Si la pregunta ya existe en el array, se genera otro numero random
     je      get_random_number
-    ;PutLInt dword[array_done_quest+EBX*4]
-    inc     EBX
+    inc     EBX                
     jmp     get_answered_questions
 clear_question:
     nwln
-    call    question_selection
+    call    question_selection  ;Llama al procedure encargado de mostrar la pregunta random
 get_answer_user:
     PutStr  msj_prompt6
-    GetCh   [answer]
-    mov     DL,byte[answer]
-    cmp     DL,'s'
-    je      ranking
-    cmp     byte[array_resp+EAX],DL
+    GetCh   [answer]            ;Se adquiere la respuesta del usuario
+    mov     DL,byte[answer]     ;Se mueve al registro DL
+    cmp     DL,'s'              ;Si la respuesta fue 's', significa salir
+    je      trivia_done1        ;Va al label trivia_done1 que es para salir del juego
+    cmp     byte[array_resp+EAX],DL ;Si la respuesta es correcta
     je      is_correct
     PutStr  msj_prompt8
-    jmp     get_random_number
+    jmp     get_random_number   ;Si no es correcta, entonces se llama al generador de numeros random para mostrar otra pregunta
 is_correct:
     sub     EDX,EDX
     PutStr  msj_prompt7
-    mov     dword[array_done_quest+EDI*4],EAX
-    mov     EDX,dword[array_pts+EAX*4]
-    ;PutLInt dword[array_pts+EAX*4]
-    ;nwln
-    add     dword[array_ingame_users_pts+ESI*4],EDX
-    ;PutLInt dword[array_ingame_users_pts+ESI*4]
-    inc     EDI
-    jmp     get_random_number
-trivia_done:
+    mov     dword[array_done_quest+EDI*4],EAX ;Si la respuesta ingresada es correcta, se mueve la pegunta al array de preguntas ya respondidas
+    mov     EDX,dword[array_pts+EAX*4] ;Se mueven los puntos correspondientes al puntaje por la pregunta
+    add     dword[array_ingame_users_pts+(ESI-1)*4],EDX ;Para sumarselos al usuario que la respondio
+    inc     EDI                 ;Incrementa EDI que es el puntero en el array de preguntas ya respondidas
+    jmp     get_random_number   ;Se llama al generador de numeros random para mostrar otra pregunta
+trivia_done1:
+    sub     EDX,EDX             ;Se limpia el EDX
+    nwln
     PutStr  msj_prompt9
-    jmp     ranking
+    PutStr  msj_prompt14
+    jmp     points_per_user     ;Se llama al label que mostraria los los puntos de esta partida
+trivia_done2:
+    jmp     ranking             ;Salta al label que muestra el ranking
 restart_ESI:
-    sub     ESI,ESI
-    jmp     get_turno
+    sub     ESI,ESI             ;Reinicia ESI para los turnos
+    jmp     get_turno           ;Salta al label de los turnos
+points_per_user:
+    cmp     EDX,dword[players]  ;Si EDX es igual a la cantidad de jugadores, deja de mostrar puntajes
+    je      trivia_done2        ;Salta al label que mostraria los datos del ranking
+    PutStr  dword[array_ingame_users+EDX*4] ;Muestra el nombre del usuario en juego
+    PutStr  points              
+    PutLInt dword[array_ingame_users_pts+EDX*4] ;Muestra el puntaje del usuario en juego
+    nwln
+    inc     EDX
+    jmp     points_per_user   
 done:
     .EXIT
 
@@ -622,7 +628,8 @@ done:
 ;PROCEDURE:
 ;This procedure works as a switch to direct the 
 ;random number generated of the questions 
-;in order to show them according to the number generated.
+;in order to show them according to the number generated in
+;groups of 5.
 ;*Entries: None
 ;*Function: Call the macro that shows the question 
 ;according to the number.
