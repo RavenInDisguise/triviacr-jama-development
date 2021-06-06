@@ -29,6 +29,10 @@ msj_prompt11 db '~Al ingresar una respuesta hagalo insertando las opciones dadas
 msj_prompt12 db '~Usted puede salir en cualquier momento de la Trivia al ingresar la letra s.',0AH,0
 msj_prompt13 db '~~~~~~~~~~~Instrucciones de uso~~~~~~~~~~~',0AH,0
 msj_prompt14 db 'Los puntos de esta partida: ',0AH,0
+<<<<<<< HEAD
+espacio      db ' -> ',0
+=======
+>>>>>>> 04bc9bf699eeb0480cc06125094d847508cf7002
 decorator    db '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',0AH,0
 points       db ':',0AH,0
 
@@ -103,6 +107,11 @@ array_ingame_users_pts     TIMES 4   dd 0
 array_users_ranking        TIMES 11  dd '~'
 array_pts_ranking          TIMES 11  dd 0
 
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 04bc9bf699eeb0480cc06125094d847508cf7002
 .UDATA
 players     resd 1              ;Cantidad de jugadores ingame
 nickname1   resd 3              ;Nickname de usuario
@@ -110,6 +119,10 @@ nickname2   resd 3              ;Nickname de usuario
 nickname3   resd 3              ;Nickname de usuario
 answer      resb 1              ;Respuestas dadas por los usuarios
 option      resd 1              ;Opciones escogidas del menu
+<<<<<<< HEAD
+variable    resd 1          
+=======
+>>>>>>> 04bc9bf699eeb0480cc06125094d847508cf7002
 
 .CODE
 
@@ -524,9 +537,37 @@ compare_option:
 ranking:
     sub     EDX,EDX
     nwln
+<<<<<<< HEAD
+    xor ESI,ESI                 ;limpieza de registros
+    xor EDX,EDX
+    xor ECX,ECX
+    xor EDI,EDI
+    mov EDI,dword[players]      ;Copia el número de jugadores en EDI
+    mov [variable], EDI         ;Copia el número de jugadores de EDI a una variable
+    call    qsort               ;llamada al qsort
+    xor EAX, EAX                ;limpia EAX
+    PutStr  msj_prompt5
+    nwln
+    xor ECX,ECX                 ;limpia ECX
+write_more:
+      ; since qsort preserves all registers, we will 
+      ; have valid EBX and ESI values.
+      
+      cmp     ECX,dword[players]                        ;Revisa que se haya llegado al final de la lista ordenada de jugadores
+      je      done                                      ;Si acabó con la lista, acaba el programa
+      PutStr  dword[array_ingame_users+EDI*4]           ;Imprime el nombre del jugador actual
+      PutStr espacio
+      PutLInt dword[array_ingame_users_pts+EDI*4]       ;Imprime el puntaje del jugador actual
+      nwln
+      inc ECX                                           ;Incrementa ECX (cantidad de jugadores impresos)
+      dec     EDI                                       ;Decrementa EDI (para pasar a la posición anterior de la lista, con puntaje inferior
+      jmp     write_more                                ;Vuelve a llamar el proceso para imprimir
+      
+=======
     PutStr  msj_prompt5
     nwln
     jmp     done
+>>>>>>> 04bc9bf699eeb0480cc06125094d847508cf7002
 players_count:
     sub     EDX,EDX
     PutStr  msj_prompt1         ;Pregunta cuantos jugadores jugaran
@@ -623,7 +664,82 @@ points_per_user:
     jmp     points_per_user   
 done:
     .EXIT
+<<<<<<< HEAD
+;-------------------------------------------------------
+;Procedure qsort receives a pointer to the array in BX. 
+;LO and HI are received in ESI and EDI, respectively.
+;It preserves all the registers.
+;-------------------------------------------------------
 
+qsort:
+      pushad   
+      cmp     EDI,ESI        ;compara los índices en EDI (mayor) y ESI (menor)
+      jle     qsort_done     ; end recursion if hi <= lo
+
+      ;Guarda los valores de los índices de los extremos
+      mov     ECX,ESI
+      mov     EDX,EDI
+
+      mov     AX,[array_ingame_users_pts+EDI*4] ; AX = xsep
+      mov     EBX,[array_ingame_users+EDI*4] ; EBX = xsep
+
+lo_loop:                        ;Loop de la mitad a la izquiera del pivote
+      cmp     [array_ingame_users_pts+ESI*4],AX    ;
+      jge     lo_loop_done      ; LO while loop
+      inc     ESI               ;
+      jmp     lo_loop           ;
+lo_loop_done:
+
+      dec     EDI            ; hi = hi-1
+hi_loop:                        ;Loop de la mitad a la derecha del pivote
+      cmp     EDI,ESI           ;
+      jle     sep_done          ;
+      cmp     [array_ingame_users_pts+EDI*4],AX    ; HI while loop
+      jle     hi_loop_done      ;
+      dec     EDI               ;
+      jmp     hi_loop           ;
+hi_loop_done:
+
+      xchg    AX,[array_ingame_users_pts+ESI*4]    ;
+      xchg    AX,[array_ingame_users_pts+EDI*4]    ; x[i] <=> x[j]
+      xchg    AX,[array_ingame_users_pts+ESI*4]    ;
+      
+      xchg    EBX,[array_ingame_users+ESI*4]    ;
+      xchg    EBX,[array_ingame_users+EDI*4]    ; x[i] <=> x[j]
+      xchg    EBX,[array_ingame_users+ESI*4]    ;
+      
+      jmp     lo_loop
+
+sep_done:
+      xchg    AX,[array_ingame_users_pts+ESI*4]    ;
+      xchg    AX,[array_ingame_users_pts+EDX*4]    ; x[i] <=> x[hi]
+      xchg    AX,[array_ingame_users_pts+ESI*4]    ;
+      
+      xchg    EBX,[array_ingame_users+ESI*4]    ;
+      xchg    EBX,[array_ingame_users+EDX*4]    ; x[i] <=> x[hi]
+      xchg    EBX,[array_ingame_users+ESI*4]    ;
+      
+      dec     ESI
+      mov     EDI,ESI           ; hi = i-1
+      ; We modify the ESI value in the next statement.
+      ; Since the original ESI value is in EDI, we use
+      ; EDI to get i+1 value for the second qsort call.
+      mov     ESI,ECX
+      call    qsort
+
+      ; EDI has the i value
+      inc     EDI       
+      inc     EDI
+      mov     ESI,EDI           ; lo = i+1
+      mov     EDI,EDX            
+      call    qsort
+
+qsort_done:
+      popad
+      ret  
+=======
+
+>>>>>>> 04bc9bf699eeb0480cc06125094d847508cf7002
 ;******************************************* 
 ;PROCEDURE:
 ;This procedure works as a switch to direct the 
@@ -685,4 +801,8 @@ question_selection10:
     fifty_questions
     jmp     return      
 return:
+<<<<<<< HEAD
     ret
+=======
+    ret
+>>>>>>> 04bc9bf699eeb0480cc06125094d847508cf7002
