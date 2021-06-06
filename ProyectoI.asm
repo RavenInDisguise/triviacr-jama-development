@@ -29,10 +29,7 @@ msj_prompt11 db '~Al ingresar una respuesta hagalo insertando las opciones dadas
 msj_prompt12 db '~Usted puede salir en cualquier momento de la Trivia al ingresar la letra s.',0AH,0
 msj_prompt13 db '~~~~~~~~~~~Instrucciones de uso~~~~~~~~~~~',0AH,0
 msj_prompt14 db 'Los puntos de esta partida: ',0AH,0
-<<<<<<< HEAD
 espacio      db ' -> ',0
-=======
->>>>>>> 04bc9bf699eeb0480cc06125094d847508cf7002
 decorator    db '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',0AH,0
 points       db ':',0AH,0
 
@@ -107,11 +104,8 @@ array_ingame_users_pts     TIMES 4   dd 0
 array_users_ranking        TIMES 11  dd '~'
 array_pts_ranking          TIMES 11  dd 0
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 04bc9bf699eeb0480cc06125094d847508cf7002
 .UDATA
 players     resd 1              ;Cantidad de jugadores ingame
 nickname1   resd 3              ;Nickname de usuario
@@ -119,10 +113,7 @@ nickname2   resd 3              ;Nickname de usuario
 nickname3   resd 3              ;Nickname de usuario
 answer      resb 1              ;Respuestas dadas por los usuarios
 option      resd 1              ;Opciones escogidas del menu
-<<<<<<< HEAD
 variable    resd 1          
-=======
->>>>>>> 04bc9bf699eeb0480cc06125094d847508cf7002
 
 .CODE
 
@@ -537,7 +528,6 @@ compare_option:
 ranking:
     sub     EDX,EDX
     nwln
-<<<<<<< HEAD
     xor ESI,ESI                 ;limpieza de registros
     xor EDX,EDX
     xor ECX,ECX
@@ -563,11 +553,6 @@ write_more:
       dec     EDI                                       ;Decrementa EDI (para pasar a la posición anterior de la lista, con puntaje inferior
       jmp     write_more                                ;Vuelve a llamar el proceso para imprimir
       
-=======
-    PutStr  msj_prompt5
-    nwln
-    jmp     done
->>>>>>> 04bc9bf699eeb0480cc06125094d847508cf7002
 players_count:
     sub     EDX,EDX
     PutStr  msj_prompt1         ;Pregunta cuantos jugadores jugaran
@@ -664,7 +649,6 @@ points_per_user:
     jmp     points_per_user   
 done:
     .EXIT
-<<<<<<< HEAD
 ;-------------------------------------------------------
 ;Procedure qsort receives a pointer to the array in BX. 
 ;LO and HI are received in ESI and EDI, respectively.
@@ -737,9 +721,6 @@ sep_done:
 qsort_done:
       popad
       ret  
-=======
-
->>>>>>> 04bc9bf699eeb0480cc06125094d847508cf7002
 ;******************************************* 
 ;PROCEDURE:
 ;This procedure works as a switch to direct the 
@@ -801,8 +782,4 @@ question_selection10:
     fifty_questions
     jmp     return      
 return:
-<<<<<<< HEAD
     ret
-=======
-    ret
->>>>>>> 04bc9bf699eeb0480cc06125094d847508cf7002
